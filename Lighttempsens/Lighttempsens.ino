@@ -16,18 +16,19 @@ void setup()
 
 void loop()
 {
-  lightlevel = analogRead(lightsensor);
-  Serial.println(lightlevel);
-  delay(100);
+
 
  buttonState = digitalRead(buttonPin);
   delay(100);
   // compare the buttonState to its previous state
   if (buttonState != lastButtonState) {
     if (buttonState == HIGH) {
+      lightlevel = analogRead(lightsensor);
+      Serial.println(lightlevel);
+      delay(100);
       // if the current state is HIGH then the button
       // went from off to on:
-      if (lightlevel > 50) {
+      if (lightlevel > 5) {
       // read the input on analog pin 0:
       float sensorValue = analogRead(A0);
       float voltageValue = 5 * sensorValue/1024;
