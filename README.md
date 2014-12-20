@@ -40,3 +40,11 @@ Quite simple and self explanatory, causes a LED to blink. Based on the public do
 #####2. NumberCountdown.
 
 Using the seven segment display, numbers from 0-9 are displayed and scrolled through.
+
+#####3. Buttonpress_count.
+
+Using the seven segment display and the button on the board, the seven segment display shows the number of times the button was pressed. Only counts from 0 to 9 due to it being a single digit display.
+
+#####4. Analog_TempSensor.
+
+Uses an analog temperature sensor to read a value and convert that to temperature. The temperature is then output to the serial monitor. In order to get this to work, the value output by the sensor needs to be converted to temperature. To do this the sensor value needs to be converted to voltage using `voltageValue = 5 * sensorValue/1024`, this is subsequently converted to resistance using the equation `resValue = (5 * 1000 / voltageValue) - 1000`. Finally using the specification sheet, the resistance needs to be calibrated with the temperature values, this can be done by plotting the values in the table given in MATLAB or Excel and obtain an equation that gives the temperature. For simplicities sake and the fact that we were working mainly at room temperature, I used MATLAB to obtain a linear function even though an exponential equation would be more accurate.
