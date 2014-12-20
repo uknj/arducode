@@ -33,4 +33,10 @@ A motor is also used for one of the projects (MotorAccelControl) for pictures se
 
 ###Overview of projects
 
-Still to be done. Will do this ASAP.
+#####1. Blink.
+
+Quite simple and self explanatory, causes a LED to blink. Based on the public domain code from the Arduino documentation. Only needed to change the pin number to ensure that it worked with the hardware setup.
+
+#####2. NumberCountdown.
+
+Using the seven segment display, numbers from 0-9 are displayed and scrolled through.
