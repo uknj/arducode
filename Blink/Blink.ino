@@ -12,18 +12,23 @@
   modified 8 May 2014
   by Scott Fitzgerald
  */
-int led = 4;
+ 
+/* Code modified by Uknj
+ Adjust the delays to change the blink speed. Adjust the LED variable to change the pin number.
+ */
+
+int led = 4; // pin number that LED is connected to.
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-  // initialize digital pin 13 as an output.
+  // initialize digital pin 4 (a.k.a led) as an output.
   pinMode(led, OUTPUT);
 }
 
 // the loop function runs over and over again forever
 void loop() {
   digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(100);              // wait for a second
+  delay(1000);              // wait for a second
   digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
-  delay(100);              // wait for a second
+  delay(1000);              // wait for a second
 }
