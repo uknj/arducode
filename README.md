@@ -1,6 +1,6 @@
 #Project: Arducode
 
-####Author(s): Umar "Uknj" Khan. Date started: 13^th 
+####Author(s): Umar "Uknj" Khan. Date started: 13th November 2014.
 
      __    __   __  ___ .__   __.        __  
     |  |  |  | |  |/  / |  \ |  |       |  | 
@@ -20,6 +20,7 @@
 1. Comment Code.
 2. Add overview of projects to the readme.
 3. Obtain and add pictures of the board.
+
 ----
 
 ###Hardware Setup
