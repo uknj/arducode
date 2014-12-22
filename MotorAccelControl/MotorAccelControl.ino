@@ -1,25 +1,31 @@
 // Motor
-int m1 = 5;
-int m2 = 6;
+int m1 = 5; // pin connection for motor
+int m2 = 6; // pin connection for motor
 
-int mlow;
-int mhigh;
+int velocity; // speed motor goes at.
 
-// Accel Sensor
-float xSensorValue;
-float ySensorValue;
+// Accelerometer
+int xSensor = A2; //sensor pin for accelerometer
+int ySensor = A1; //sensor pin for accelerometer
 
-int xbase;
-int ybase;
-int xupper;
-int xlower;
-int yupper;
-int ylower;
+float xSensorValue; //value sensor pin outputs on x-axis
+float ySensorValue; //value sensor pin outputs on y-axis
 
-int xSensor = A2;
-int ySensor = A1;
+int xbase; // base value for x-axis, all measurements will be realtive to this one
+int ybase; // base value for y-axis, all measurements will be realtive to this one
 
-// 7 seg display
+int xupper; //upper limit on the x-axis
+int xlower; //lower limit on the x-axis
+int yupper; //upper limit on the y-axis
+int ylower; //lower limit on the y-axis
+
+// sensor values used to decide the speed, will need to be adjusted depending on the base value, potential improvement here.
+int mplow = xbase + 5;
+int mphigh = xbase + 10;
+int mnlow = xbase - 10;
+int mnhigh = xbase - 5;
+  
+// 7 seg display. Pin numbers for the display.
 int a = 12;
 int b = 13;
 int c = 9;
@@ -51,55 +57,29 @@ void setup() {
 
 void loop () { 
   
- xSensorValue = analogRead(xSensor);
- ySensorValue = analogRead(ySensor);
+  xSensorValue = analogRead(xSensor);
+  ySensorValue = analogRead(ySensor);
  
-  // Serial.print("X base is ");
-  // Serial.println(xbase);
-  // Serial.print("Y base is ");
-  // Serial.println(ybase);
-
-
-  Serial.print("X Value is ");
-  Serial.println(xSensorValue);
-  Serial.print("Y value is ");
-  Serial.println(ySensorValue);
+  //Serial.print("X Value is ");
+  //Serial.println(xSensorValue);
+  //Serial.print("Y value is ");
+  //Serial.println(ySensorValue);
   
   int xupper = xbase + 4;
-  int xlower = xbase - 4;
+  int xlower = ybase - 4;
   int yupper = xbase + 4;
-  int ylower = xbase - 4;
+  int ylower = ybase - 4;
   
-  int mplow = 517;
-  int mphigh = 522;
-  int mnlow = 503;
-  int mnhigh = 508;
-  
-  int velocity;
-  
-  
-  if (mnlow < xSensorValue < mnhigh) velocity = 170;
-  if (xSensorValue < mnlow) velocity = 85;
-  if (xSensorValue > mnhigh) velocity = 255;
-  if (mplow < xSensorValue < mphigh) velocity = 170;
-  if (xSensorValue < mplow) velocity = 85;
-  if (xSensorValue > mphigh) velocity = 255;
-  
-  if (xlower < xSensorValue < xupper && ylower < ySensorValue < yupper) allon();
-  if (xSensorValue > xupper) {
-    xless (); 
-    
-  }
-  if (xSensorValue < xlower) {
-    xmore ();
-  }
-  if (ySensorValue > yupper) ymore ();
-  if (ySensorValue < ylower) yless ();
-  if (xSensorValue > xupper && ySensorValue < ylower) xyLess();
-  if (xSensorValue < xlower && ySensorValue > yupper) xyMore();
-  if (xSensorValue > xupper && ySensorValue > yupper) xLessYmore();
-  if (xSensorValue < xlower && ySensorValue < ylower) xMoreYless(); 
-  
+  if (xlower < xSensorValue < xupper && ylower < ySensorValue < yupper) allon(); // switches all lights on if accelerometer registers as flat.
+  if (xSensorValue > xupper) xless (); //single line depending on tilt.
+  if (xSensorValue < xlower) xmore (); //single line depending on tilt.
+  if (ySensorValue > yupper) ymore (); //single line depending on tilt.
+  if (ySensorValue < ylower) yless (); //single line depending on tilt.
+  if (xSensorValue > xupper && ySensorValue < ylower) xyLess(); //2 lines depending on tilt of both axis.
+  if (xSensorValue < xlower && ySensorValue > yupper) xyMore(); //2 lines depending on tilt of both axis.
+  if (xSensorValue > xupper && ySensorValue > yupper) xLessYmore(); //2 lines depending on tilt of both axis.
+  if (xSensorValue < xlower && ySensorValue < ylower) xMoreYless(); //2 lines depending on tilt of both axis.
+      
   Serial.print("Velocity is ");
   Serial.println(velocity);
   
@@ -146,7 +126,7 @@ void loop () {
     digitalWrite(g, 1);
  }
  void xmore () {
-//    Serial.println("X tilt is MORE ");
+    Serial.println("X tilt is positive ");
     digitalWrite(a, 1);
     digitalWrite(b, 0);
     digitalWrite(c, 0);
@@ -154,9 +134,16 @@ void loop () {
     digitalWrite(e, 1);
     digitalWrite(f, 1);
     digitalWrite(g, 1);
+
+    // adjusts speed based on x-axis tilt (+ve or -ve) and angle of tilt.
+    if (mplow < xSensorValue < mphigh) velocity = 170;
+    if (xSensorValue < mplow) velocity = 85;
+    if (xSensorValue > mphigh) velocity = 255;
+    analogWrite(m2, velocity);
+    analogWrite(m1, 0);
  }
   void xless () {
-//    Serial.println("X tilt is LESS ");
+    Serial.println("X tilt is negative ");
     digitalWrite(a, 1);
     digitalWrite(b, 1);
     digitalWrite(c, 1);
@@ -164,7 +151,13 @@ void loop () {
     digitalWrite(e, 0);
     digitalWrite(f, 0);
     digitalWrite(g, 1);
-
+    
+    // adjusts speed based on x-axis tilt (+ve or -ve) and angle of tilt.
+    if (mnlow < xSensorValue < mnhigh) velocity = 170;
+    if (xSensorValue < mnlow) velocity = 85;
+    if (xSensorValue > mnhigh) velocity = 255;
+    analogWrite(m1, velocity);
+    analogWrite(m2, 0);
  }
   void ymore () {
 //    Serial.println("Y tilt is MORE ");
@@ -199,31 +192,5 @@ void loop () {
     digitalWrite(m1, 0);
     digitalWrite(m2, 0);
  }
- 
-/*
- void pnormal(){
-   analogWrite(m1, 170);
-   analogWrite(m2, 0);
- }
-  void pslow(){
-   analogWrite(m1, 85);
-   analogWrite(m2, 0);
- }
-  void pfast(){
-   analogWrite(m1, 255);
-   analogWrite(m2, 0);
- }
- 
-  void nnormal(){
-   analogWrite(m2, 170);
-   analogWrite(m1, 0);
- }
-  void nslow(){
-   analogWrite(m2, 85);
-   analogWrite(m1, 0);
- }
-  void nfast(){
-   analogWrite(m2, 255);
-   analogWrite(m1, 0);
- }
-*/
+
+
