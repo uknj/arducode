@@ -1,44 +1,43 @@
-#include <math.h>
+#include <math.h> //including the math library to potentially use a more accurate calibration with exponentials.
 
 int address = 72; // define I2C Address
 
-const int buttonPin = 2;    // the number of the pushbutton pin
-int buttonState = 0;         // current state of the button
-int lastButtonState = 0;     // previous state of the button
+const int buttonPin = 2; // the number of the pushbutton pin
+int buttonState = 0; // current state of the button
+int lastButtonState = 0; // previous state of the button
 
-int lightsensor = A3;
-int lightlevel;
+int lightsensor = A3; // sensor pin
+int lightlevel; // sensor value
+int baselight; // the background amount of light
 
 void setup()
 {
-  Serial.begin(9600);  // start serial for output
+  Serial.begin(9600); // start serial for output
+  baselight = analogRead(lightsensor);
 }
 
 void loop()
 {
 
-
+// first, detect button press.
  buttonState = digitalRead(buttonPin);
-  delay(100);
+  delay(100); //delay to prevent debounce.
   // compare the buttonState to its previous state
   if (buttonState != lastButtonState) {
-    if (buttonState == HIGH) {
-      lightlevel = analogRead(lightsensor);
-      Serial.println(lightlevel);
-      delay(100);
-      // if the current state is HIGH then the button
-      // went from off to on:
-      if (lightlevel > 5) {
+    if (buttonState == HIGH) {      // if the current state is HIGH then the button went from off to on:
+      delay(100); // delay the reading of the lightsensor for 0.1s to allow the increase in light due to 
+      lightlevel = analogRead(lightsensor); // read the lightsensor to obtain a value.
+      Serial.println(lightlevel); // Output the value to serial.
+      
+      // Check to see if the lightvalue is above a certain background value.
+      if (lightlevel > baselight) {
       // read the input on analog pin 0:
-      float sensorValue = analogRead(A0);
+      float sensorValue = analogRead(A0); // 
       float voltageValue = 5 * sensorValue/1024;
       float resValue = (5 * 1000 / voltageValue) - 1000;
       float tempValue = (resValue - 1599) / 17.25;
   
-      // print out the value you read:
-      // Serial.println(sensorValue);
-      // Serial.println(voltageValue);
-//      Serial.println(resValue);
+      // print the temperature value.
       Serial.println(tempValue);
       }
     } 
