@@ -20,10 +20,10 @@ int yupper; //upper limit on the y-axis
 int ylower; //lower limit on the y-axis
 
 // sensor values used to decide the speed, will need to be adjusted depending on the base value, potential improvement here.
-int mplow = xbase + 5;
-int mphigh = xbase + 10;
-int mnlow = xbase - 10;
-int mnhigh = xbase - 5;
+int mplow;
+int mphigh;
+int mnlow;
+int mnhigh;
   
 // 7 seg display. Pin numbers for the display.
 int a = 12;
@@ -38,13 +38,22 @@ int g = 10;
 void setup() {
   
   Serial.begin(9600);
-  //
+  
+  // assing base values
   xbase = analogRead(xSensor);
   ybase = analogRead(ySensor);
-  //
+  
+  // sensor values used to decide the speed, will need to be adjusted depending on the base value, potential improvement here.
+  mplow = xbase + 5;
+  mphigh = xbase + 10;
+  mnlow = xbase - 10;
+  mnhigh = xbase - 5;
+  
+  //Setup pins for motor.
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
-  //
+  
+  //Setup pins for display.
   pinMode(7, OUTPUT);  
   pinMode(8, OUTPUT);
   pinMode(9, OUTPUT);
@@ -85,6 +94,7 @@ void loop () {
   
   delay(100);
 }
+
  void xyLess() {
 //    Serial.println("X & y tilt is LESS ");
     digitalWrite(a, 1);
