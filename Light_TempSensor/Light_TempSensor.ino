@@ -29,7 +29,7 @@ void loop()
       lightlevel = analogRead(lightsensor); // read the lightsensor to obtain a value.
       Serial.println(lightlevel); // Output the value to serial.
       
-      // Check to see if the lightvalue is above a certain background value.
+      // Check to see if the lightvalue is above the background value.
       if (lightlevel > baselight) {
       // read the input on analog pin 0:
       float sensorValue = analogRead(A0); // 
@@ -44,7 +44,7 @@ void loop()
     else {
       // if the current state is LOW then the button
       // wend from on to off:
-      Serial.println("off"); 
+      Serial.println("Not enough light"); 
     }
 
   }
