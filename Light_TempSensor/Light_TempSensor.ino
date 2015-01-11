@@ -1,7 +1,3 @@
-#include <math.h> //including the math library to potentially use a more accurate calibration with exponentials.
-
-int address = 72; // define I2C Address
-
 const int buttonPin = 2; // the number of the pushbutton pin
 int buttonState = 0; // current state of the button
 int lastButtonState = 0; // previous state of the button
@@ -27,10 +23,10 @@ void loop()
     if (buttonState == HIGH) {      // if the current state is HIGH then the button went from off to on:
       delay(100); // delay the reading of the lightsensor for 0.1s to allow the increase in light due to 
       lightlevel = analogRead(lightsensor); // read the lightsensor to obtain a value.
-      Serial.println(lightlevel); // Output the value to serial.
+//      Serial.println(lightlevel); // Output the value to serial.
       
       // Check to see if the lightvalue is above the background value.
-      if (lightlevel > baselight) {
+      if (lightlevel > baselight) {{
       // read the input on analog pin 0:
       float sensorValue = analogRead(A0); // 
       float voltageValue = 5 * sensorValue/1024;
@@ -52,4 +48,4 @@ void loop()
   //for next time through the loop
   lastButtonState = buttonState;
 
-}
+}}

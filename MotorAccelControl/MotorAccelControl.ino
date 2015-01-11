@@ -49,6 +49,11 @@ void setup() {
   mnlow = xbase - 10;
   mnhigh = xbase - 5;
   
+  xupper = xbase + 4;
+  xlower = ybase - 4;
+  yupper = xbase + 4;
+  ylower = ybase - 4;  
+  
   //Setup pins for motor.
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
@@ -65,38 +70,24 @@ void setup() {
 }
 
 void loop () { 
-  
   xSensorValue = analogRead(xSensor);
   ySensorValue = analogRead(ySensor);
+  Serial.print(xSensorValue); 
  
-  //Serial.print("X Value is ");
-  //Serial.println(xSensorValue);
-  //Serial.print("Y value is ");
-  //Serial.println(ySensorValue);
-  
-  int xupper = xbase + 4;
-  int xlower = ybase - 4;
-  int yupper = xbase + 4;
-  int ylower = ybase - 4;
-  
   if (xlower < xSensorValue < xupper && ylower < ySensorValue < yupper) allon(); // switches all lights on if accelerometer registers as flat.
-  if (xSensorValue > xupper) xless (); //single line depending on tilt.
-  if (xSensorValue < xlower) xmore (); //single line depending on tilt.
-  if (ySensorValue > yupper) ymore (); //single line depending on tilt.
-  if (ySensorValue < ylower) yless (); //single line depending on tilt.
-  if (xSensorValue > xupper && ySensorValue < ylower) xyLess(); //2 lines depending on tilt of both axis.
-  if (xSensorValue < xlower && ySensorValue > yupper) xyMore(); //2 lines depending on tilt of both axis.
-  if (xSensorValue > xupper && ySensorValue > yupper) xLessYmore(); //2 lines depending on tilt of both axis.
-  if (xSensorValue < xlower && ySensorValue < ylower) xMoreYless(); //2 lines depending on tilt of both axis.
+  if (xSensorValue > xupper) xless (); // single line depending on tilt.
+  if (xSensorValue < xlower) xmore (); // single line depending on tilt.
+  if (ySensorValue > yupper) ymore (); // single line depending on tilt.
+  if (ySensorValue < ylower) yless (); // single line depending on tilt.
+  if (xSensorValue > xupper && ySensorValue < ylower) xyLess(); // 2 lines depending on tilt of both axis.
+  if (xSensorValue < xlower && ySensorValue > yupper) xyMore(); // 2 lines depending on tilt of both axis.
+  if (xSensorValue > xupper && ySensorValue > yupper) xLessYmore(); // 2 lines depending on tilt of both axis.
+  if (xSensorValue < xlower && ySensorValue < ylower) xMoreYless(); // 2 lines depending on tilt of both axis.
       
-  Serial.print("Velocity is ");
-  Serial.println(velocity);
   
-  delay(100);
 }
 
  void xyLess() {
-//    Serial.println("X & y tilt is LESS ");
     digitalWrite(a, 1);
     digitalWrite(b, 1);
     digitalWrite(c, 1);
@@ -106,7 +97,6 @@ void loop () {
     digitalWrite(g, 1);    
  }
  void xyMore() {
-//    Serial.println("X & y tilt is MORE ");
     digitalWrite(a, 0);
     digitalWrite(b, 0);
     digitalWrite(c, 0);
@@ -116,7 +106,6 @@ void loop () {
     digitalWrite(g, 1);
  }
  void xLessYmore() {
-//    Serial.println("X & y tilt is LESS ");
     digitalWrite(a, 0);
     digitalWrite(b, 1);
     digitalWrite(c, 1);
@@ -126,7 +115,6 @@ void loop () {
     digitalWrite(g, 1);
  }
  void xMoreYless() {
-//    Serial.println("X & y tilt is LESS ");
     digitalWrite(a, 1);
     digitalWrite(b, 0);
     digitalWrite(c, 0);
@@ -151,6 +139,11 @@ void loop () {
     if (xSensorValue > mphigh) velocity = 255;
     analogWrite(m2, velocity);
     analogWrite(m1, 0);
+    
+    Serial.print("Velocity is ");
+    Serial.println(velocity);
+  
+  delay(100);
  }
   void xless () {
     Serial.println("X tilt is negative ");
@@ -168,6 +161,11 @@ void loop () {
     if (xSensorValue > mnhigh) velocity = 255;
     analogWrite(m1, velocity);
     analogWrite(m2, 0);
+    
+    Serial.print("Velocity is ");
+    Serial.println(velocity);
+  
+  delay(100);
  }
   void ymore () {
 //    Serial.println("Y tilt is MORE ");
@@ -191,7 +189,7 @@ void loop () {
  }
  
  void allon(){
-//    Serial.println(" X & Y are flat ");
+    Serial.println(" X & Y are flat ");
     digitalWrite(a, 0);
     digitalWrite(b, 0);
     digitalWrite(c, 0);
@@ -201,6 +199,11 @@ void loop () {
     digitalWrite(g, 0);
     digitalWrite(m1, 0);
     digitalWrite(m2, 0);
+    
+    
+    Serial.print("Velocity is ");
+    Serial.println(0);
+    delay(100);
  }
 
 
